@@ -75,7 +75,7 @@ $ docker build -t docker-user/my-consumer .
 [Flow](https://flow.org/)
 
 ## TODO
-[ ] Add tests
+- [ ] Add tests
 
 ## License
 
