@@ -74,6 +74,9 @@ $ docker build -t docker-user/my-consumer .
 
 [Flow](https://flow.org/)
 
+## TODO
+[ ] Add tests
+
 ## License
 
 This project is licensed under the MIT license, Copyright (c) 2017 SSENSE.
