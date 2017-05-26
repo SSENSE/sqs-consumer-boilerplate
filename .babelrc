@@ -1,0 +1,22 @@
+{
+  "presets": [
+    "es2015",
+    "es2017",
+    "stage-0"
+  ],
+  "plugins": [
+    "syntax-flow",
+    "transform-flow-strip-types",
+    "transform-runtime",
+    "add-module-exports",
+    "transform-decorators-legacy",
+    "class-display-name"
+  ],
+  "env": {
+    "test": {
+      "plugins": [
+        "istanbul"
+      ]
+    }
+  }
+}

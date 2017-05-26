@@ -1,0 +1,32 @@
+sudo: required
+language: node_js
+node_js:
+- 7.8
+services:
+- docker
+after_success:
+- |-
+  if [ ! -z "$TRAVIS_TAG" ]; then
+    docker login -u $DOCKER_USER -p $DOCKER_PASS;
+    docker build -t $DOCKERHUB_REPO:$COMMIT_HASH .
+    docker tag $DOCKERHUB_REPO:$COMMIT_HASH $DOCKERHUB_REPO:$TRAVIS_TAG;
+    docker push $DOCKERHUB_REPO:$TRAVIS_TAG;
+  fi
+notifications:
+  slack:
+    rooms:
+    - ssense:NaXRxZ0oVCeDOrhnc6YUAltp#wms-ci
+    - ssense:NaXRxZ0oVCeDOrhnc6YUAltp#build
+    template:
+    - "%{repository_slug}#%{build_number} (%{branch} - %{commit} : %{author}): %{commit_message}"
+    - 'Build: <%{build_url}|#%{build_number}>'
+    - 'Compare: <%{compare_url}|%{commit}>'
+    - 'Duration: %{duration} - Elapsed time: %{elapsed_time}'
+    - 'Result: %{result}: %{message}'
+env:
+  global:
+  - COMMIT_HASH=${TRAVIS_COMMIT::8}
+  - DOCKERHUB_REPO="ssense/$(basename $TRAVIS_REPO_SLUG)"
+  - secure: cHO9Coi86Z+DEz9OVMnmFYsNENSCyYVJ63//xjDemfUF9IYQh0Efm8BbWRo0wHy9p7W0EteeM3XU7Cc2cr1jNrspHA4K+nH9VT8YLPSgcjGJ59PExMmkbukFW8X55Cdc1XokyckjQMqCeqC9WOQ7R+9oR0dE+a9KgQSHAkHH7dv0hYYM9y3/1xpOA1xfAp4MLxsZ0Fv/6OrtnpHRm8InRf+moZYbcMs8NQD4JKcbNSyUYRpAD2mhTagbFgMy8e5gGKnyH6qB5wKrL1P5dzcHU4oBHOOy2Mu8j29T3KNLSfnIfax4t90e0hKO+lnAzZE62UbPY5UM4JioJYcUtLQNZZDLRYLx6VDpZ42X8V/jmMZlqN2U4WwIiZmmElv6wsYQlah803TiFY8gmTn0Gn9j6tzWkM1r4wehx0K/xuWTLlNtk4+WsHbCknSZKbf57dzSQzJGiKR45ln8006ngtE4DgM80ke31r7nJ5PxiJ58Qw2KqgHKEA3MmKtisGdMldht7WUqmp25cjl4zuCNb76Z8kAAaWo1sD4WiaLf5yMrWpOUhH83QxXwMk6TAm18dELfppRlxmgrgSWFULvHq4NpPhov7f6RnEJTk/0xLG4yYv+W/nIat9/djrLVrInVlwg846lVMX4kgMw+XMWt7ifukT4gp9kR4qDLFQI4Hhg+em4=
+  - secure: WMT+156tSoTREAui8cGAZ8AxOYVZfLgXTkG3lhlc0OYGsjFnz68Q1S6Sd6vuFQw3toZqyYDrUqyXwN0qXOZwvDnAbMvkDuF2pZYAa9ZO19fhwLFSShjvrrSz+1cHt5EJ5L7+F0Y9/9BO15HtVfFeQCS5XfUixtLbGZQVnhXgCHUye39jK6RFQxImhKqAK1faAfG5Zn/5PqoGtCqVGgNoC+WPu7Py797oGCfwwatdh0I6kqrBfEI0iJXv0JwHdOASVRuEMyQOulihGOuARI0iPzCH8MVxcerV0vAKjM0+9BYGDdt35visjZ/+Wf1dM8VogkuAJau6Olp1yCzl5oIklJtFKHtUbgX9lEkKHpJSXf32bTZ8W44txfuXQhEVos/FIbMFPjdbOCg6/bbll7/uZIB2Vlx5m8e1K0sUOMTy54r2tCR1NCg9HslLolWVYFVnW1xYpT3yLxzSmFgh7DvPlMy4XyQ6CfbXDN+fgi4dg0NNO7vKxTN/P79x+zY34VHcPlqcV1aFr3OvWy1OVvGKaDLvXcG9KH9i+KmfIeQLw5adnfcM9jDgNVmZ5QYs9zLjSrAaLsn+M5pUbsrS17hNwyDK5ruGuX/UtybHfanHVroH9C5wbEGrNL5l8TFqd70es9oNo1Fh8514oFMJQFykNy4CUNf5/ElpABIHQr2a6c8=
+  - secure: Zi4JpXWHW+mQSDHQ96R59m9nRQbGpgkYJJXo56HKVRuV3FnNrqn1CHpR0IzwnfOiuyKPMTimYuoqXRCp40kROmFNAwzcYvOVCcayP4W57ledbWJuwZ+wvyLodadcEOULJVnq4ok+/jds9S2OBIiNpaO6/0ZRg0L53QQ3ZXpr7bfvCx0QonmHPJABdpzCoByxQsx0LZ0UNWR+V7iYNEhV+FertMJ40zOGQMtUvTtEts1JfXGjXfiMY8jINaQSh6ns1QuYYfnbvZhcsqcAndDWpl79OjdFGooCmX/j+ru+49ucH5q5/uJHtz/Na2MItZCXNiBt3a5VFuz/So5PQqa1vFB/k9q/B1RHG2h8kUYEgnaIOWxSbMx0s7McSSaRX2R194YRvHXkOB8OMI9vvQeWxy50AatMA0gLeOEzB16u1JO0SE+U7jTpKSmurd/kCpxiFaihsTc1Cwx4MThV/ou/5BNiZi2pWNSqmLFyu+hj51MwHea+sB2PveUR2tZbnzH03nGdCNR+FjyRuFxRXq3pIGAkr62ae0LTLv8lRHwK5WGGbgfZ/AfJnAWpEdY4g8bUc+J36YKo5RG0b99+efOzAa1b0YdkMIDQkMaZoqVyhTbgtvWB8AfVM/NqgvI9v0bNEg9V1N8SVOIjpRiAnl94lAbjmBF8bPyMBbLJnue/YgQ=

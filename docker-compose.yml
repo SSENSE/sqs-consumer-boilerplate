@@ -1,0 +1,18 @@
+version: '3.1'
+services:
+  consumer:
+    image: docker-user/my-consumer
+    build:
+      context: .
+      args:
+        - NODE_ENV=development
+    command: npm run dev
+    env_file: ./.env
+    environment:
+      - APP_NAME=My Consumer
+      - APP_ID=my-consumer
+    volumes:
+      - ./:/code
+      - /code/node_modules
+    environment:
+      - NODE_ENV=development
