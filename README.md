@@ -58,7 +58,17 @@ $ docker-compose up
 #### Build Docker image
 
 ```shell
+# Production dependencies only
 $ docker build -t docker-user/my-consumer .
+
+# With devDependencies
+docker build -t docker-user/my-consumer --build-arg NODE_ENV=development .
+```
+
+#### Add your remote git repository
+
+```shell
+git remote add origin git@github.com:organization/my-repository.git
 ```
 
 
