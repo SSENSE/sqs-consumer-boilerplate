@@ -18,8 +18,7 @@ COPY package.json /code/
 
 WORKDIR /code
 
-# RUN npm install --depth=0 && npm cache clean
-RUN npm install --depth=0
+RUN npm install --depth=0 && npm cache clean
 
 # copy in our source code last, as it changes the most
 COPY . /code
